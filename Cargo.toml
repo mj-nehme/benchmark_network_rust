@@ -1,0 +1,19 @@
+[package]
+name = "benchmark_network"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["Mohamad Jaafar NEHME"]
+description = "A network benchmark library"
+repository = "https://github.com/mj-nehme/benchmark_network_rust"
+keywords = ["Message", "Bandwidth", "Benchmark", "Network", "TCP/IP", "Broadcast"]
+categories = ["Message", "Bandwidth", "Benchmark", "Network", "Broadcast"]
+
+[lib]
+
+[dependencies]
+uuid = { version = "1.1.2", features = ["v4", "serde"] }
+serde = { version = "1.0.144", features = ["derive"] }
+serde_yaml = "0.9.13"
+strum = "0.24.1"
+strum_macros = "0.24.3"

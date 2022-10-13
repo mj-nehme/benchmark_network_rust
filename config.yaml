@@ -1,0 +1,8 @@
+server: "127.0.0.1" # localhost
+client: "127.0.0.1"
+port: 7777
+message_size: 100000 # message body_size;
+batch_size: 100000 # number of messages per batch
+number_batches: 1 #
+number_clients: 1
+role: "Server"
