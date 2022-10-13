@@ -10,9 +10,9 @@ use std::net::TcpStream;
 ///     be no more than u128
 ///
 /// # Example
-/// ```
-/// # use benchmark_network::{client, io::send, server};
-/// # use benchmark_network::{message::Message, mtype::Type};
+/// ```no_run
+/// # use benchmark_network::network::{client, io::send, server};
+/// # use benchmark_network::message::{message::Message, mtype::Type};
 /// # use std::net::{IpAddr, Ipv4Addr};
 /// #
 /// # const LOCALHOST: IpAddr = IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1));
@@ -28,13 +28,13 @@ use std::net::TcpStream;
 /// #
 /// # let content = vec![EMPTY_BYTE as u8; BODY_SIZE];
 /// # let body = Box::new(content);
-/// # let msg = Message::<Vec<u8>>::new(SOURCE, DESTINATION, BODY_SIZE, MTYPE, body.into());
+/// # let msg = Message::new(SOURCE, DESTINATION, BODY_SIZE, MTYPE);
 /// # let size = send(&mut stream, &msg).expect("Unable to send message");
-/// # assert_eq!(size, 61 + BODY_SIZE as u128);
+/// # assert_eq!(size, BODY_SIZE);
 /// #
-/// # let msg = Message::<Vec<u8>>::new(SOURCE, DESTINATION, 0, Type::Close, None);
+/// # let msg = Message::new(SOURCE, DESTINATION, 0, Type::Close);
 ///   let size = send(&mut stream, &msg).expect("Unable to send message");
-///   assert_eq!(size, 53);
+///   assert_eq!(size, 0);
 /// ```
 /// In order to run this example, a server should be running first.
 pub fn send(stream: &mut TcpStream, msg: &Message) -> Result<usize, Box<dyn Error>> {
@@ -51,12 +51,11 @@ pub fn send(stream: &mut TcpStream, msg: &Message) -> Result<usize, Box<dyn Erro
 /// Reads Result<Message> from a TcpStream
 ///
 /// # Example
-/// ```
-/// # use benchmark_network::{client, io::read, server::{self, close}};
-/// # use benchmark_network::{message::Message, mtype::Type};
+/// ```no_run
+/// # use benchmark_network::network::{client, io::read, server::{self, close}};
+/// # use benchmark_network::message::{message::Message, mtype::Type};
 /// # use std::thread;
 /// # use std::net::{Shutdown, TcpListener, TcpStream, IpAddr, Ipv4Addr};
-/// # use serde::de::DeserializeOwned;
 /// #
 /// # const NOADDRESS: IpAddr = IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0));
 /// # const PORT: u16 = 6666;
@@ -70,7 +69,7 @@ pub fn send(stream: &mut TcpStream, msg: &Message) -> Result<usize, Box<dyn Erro
 /// #         match stream {
 /// #             Ok(stream) => {
 /// #                 println!("New connection: {}", stream.peer_addr().unwrap());
-/// #                 let handle = thread::spawn(move || handle_client::<Vec<u8>>(stream));
+/// #                 let handle = thread::spawn(move || handle_client(stream));
 /// #             }
 /// #             Err(e) => {
 /// #                 println!("Connection failed: {}", e);
@@ -80,9 +79,9 @@ pub fn send(stream: &mut TcpStream, msg: &Message) -> Result<usize, Box<dyn Erro
 /// #     Ok(())
 /// # }
 /// #
-/// # pub fn handle_client<T: Send + Sync + DeserializeOwned>(mut stream: TcpStream) {
+/// # pub fn handle_client(mut stream: TcpStream) {
 /// #     loop {
-///          let message = match read::<T>(&mut stream) {
+///          let message = match read(&mut stream) {
 ///              Ok(message) => match message.mtype() {
 /// #                 Type::Close => {
 /// #                     break;

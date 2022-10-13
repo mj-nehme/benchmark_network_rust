@@ -5,8 +5,8 @@ use std::net::{IpAddr, TcpStream};
 /// Connects the client to the designated server on a specific port
 ///
 /// # Example
-/// ```
-/// # use benchmark_network::{client, io::send, server};
+/// ```no_run
+/// # use benchmark_network::network::{client, io::send, server};
 /// # use std::net::{IpAddr, Ipv4Addr};
 /// # const LOCALHOST: IpAddr = IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1));
 /// # const SOURCE: IpAddr = LOCALHOST;

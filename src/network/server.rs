@@ -79,7 +79,7 @@ pub fn handle_client(mut stream: TcpStream) {
     close(stream);
 }
 
-fn close(stream: TcpStream) {
+pub fn close(stream: TcpStream) {
     let peer_addr = stream
         .peer_addr()
         .expect("Unable to retrieve client's address on closing socket");
