@@ -13,4 +13,5 @@ The most strightforward way to use it:
 `cargo run -- --client`
 
 Crate can be accessed on https://crates.io/crates/benchmark_network
+
 Github repo can be accessed on https://github.com/mj-nehme/benchmark_network_rust
