@@ -1,13 +1,13 @@
 [package]
 name = "benchmark_network"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "Apache-2.0"
 authors = ["Mohamad Jaafar NEHME"]
 description = "A network benchmark library"
 repository = "https://github.com/mj-nehme/benchmark_network_rust"
 keywords = ["Message", "Bandwidth", "Benchmark", "Network", "Broadcast"]
-categories = ["Message", "Bandwidth", "Benchmark", "Network", "Broadcast"]
+categories = ["network-programming", "development-tools"]
 
 [lib]
 
