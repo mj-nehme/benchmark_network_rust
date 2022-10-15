@@ -36,6 +36,7 @@ pub struct Config {
 
 #[allow(unused)]
 impl Config {
+    /// Reads Config file `config.yaml` from the base directory
     pub fn read_config_file() -> Config {
         let config_file = std::fs::File::open("config.yaml").expect("Unable to open Config file");
         let config: Config =
@@ -43,24 +44,29 @@ impl Config {
         config
     }
 
-    pub fn update(&mut self, variable: &str, value: Option<&str>) -> Result<(), Box<dyn Error>> {
+    ///
+    pub fn parse_attributes(
+        &mut self,
+        variable: &str,
+        value: Option<&str>,
+    ) -> Result<(), Box<dyn Error>> {
         match variable {
-            "client" | "Client" | "c" => match value {
-                Some(value) => {
+            "client" | "Client" | "c" => {
+                self.role = Role::Client;
+                if let Some(value) = value {
                     self.client = value
+                        .parse::<IpAddr>()
+                        .expect("Unable to retrieve client IP address from terminal")
+                }
+            }
+            "server" | "Server" | "s" => {
+                self.role = Role::Server;
+                if let Some(value) = value {
+                    self.server = value
                         .parse::<IpAddr>()
                         .expect("Unable to retrieve server IP address from terminal")
                 }
-                None => return Err("Unknown Argument: client!")?,
-            },
-            "server" | "Server" | "s" => match value {
-                Some(value) => {
-                    self.server = value
-                        .parse::<IpAddr>()
-                        .expect("Unable to retrieve client's IP address from terminal")
-                }
-                None => return Err("Unknown Argument: server!")?,
-            },
+            }
             "port" | "Port" | "p" => match value {
                 Some(value) => {
                     self.port = value
@@ -85,7 +91,7 @@ impl Config {
                 }
                 None => return Err("Unknown Argument: batch_size!")?,
             },
-            "numberbatches" | "NumberBatches" | "n" => match value {
+            "numberbatches" | "NumberBatches" | "number_batches" | "n" => match value {
                 Some(value) => {
                     self.number_batches = value
                         .parse::<usize>()
@@ -93,7 +99,7 @@ impl Config {
                 }
                 None => return Err("Unknown Argument: number_batches!")?,
             },
-            "numberclients" | "numberClients" | "nc" => match value {
+            "numberclients" | "numberClients" | "number_clients" | "nc" => match value {
                 Some(value) => {
                     self.number_clients = value
                         .parse::<usize>()
@@ -102,8 +108,8 @@ impl Config {
                 None => return Err("Unknown Argument: number_clients!")?,
             },
             "role" | "Role" | "r" => match value {
-                Some("client") | Some("Client") | Some("c") => self.role = Role::Server,
-                Some("server") | Some("Server") | Some("s") => self.role = Role::Client,
+                Some("client") | Some("Client") | Some("c") => self.role = Role::Client,
+                Some("server") | Some("Server") | Some("s") => self.role = Role::Server,
                 Some(_) | None => return Err("Unknown Argument: role!")?,
             },
 
@@ -154,6 +160,20 @@ impl Config {
         }
         println!("Example: ./benchmark_network --role=server --p=7777");
         println!("Example: cargo run -- --role=server --p=7777");
+        println!("=====================");
+    }
+
+    pub fn print(&self) {
+        println!("Config:");
+        println!("=======");
+        println!("server: {}", self.server);
+        println!("client: {}", self.client);
+        println!("message_size: {}", self.message_size);
+        println!("batch_size: {}", self.batch_size);
+        println!("number_batches: {}", self.number_batches);
+        println!("number_clients: {}", self.number_clients);
+        println!("role: {:?}", self.role);
+        println!("=====================");
     }
 }
 
